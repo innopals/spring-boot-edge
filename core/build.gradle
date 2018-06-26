@@ -1,0 +1,38 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    }
+}
+
+apply plugin: 'java'
+
+archivesBaseName = 'spring-boot-edge-core'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+}
+
+dependencies {
+    compile(group: 'com.google.guava', name: 'guava', version: '25.1-jre')
+    compile(group: 'org.apache.commons', name: 'commons-lang3', version: '3.7')
+    compile(group: 'commons-io', name: 'commons-io', version: '2.6')
+    compile(group: 'com.auth0', name: 'java-jwt', version: '3.4.0')
+
+    compile('com.squareup.retrofit2:converter-scalars:2.4.0')
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
+
+    compileOnly('org.projectlombok:lombok:1.18.0')
+    compileOnly group: 'redis.clients', name: 'jedis', version: '2.9.0'
+    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.1'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+}
