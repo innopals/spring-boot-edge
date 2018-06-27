@@ -3,6 +3,8 @@ package com.innopals.edge.demo.api.controllers;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
+import com.innopals.edge.EdgeContext;
+import com.innopals.edge.annotations.EdgeAction;
 import com.innopals.edge.demo.api.domain.User;
 import com.innopals.edge.demo.api.domain.UserInfo;
 import com.innopals.edge.domain.ListResult;
@@ -11,13 +13,12 @@ import com.innopals.edge.domain.ResultWrapper;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author bestmike007
@@ -136,6 +137,17 @@ public class MockRearController {
         setName("Name of " + id);
       }});
     }};
+  }
+
+  @GetMapping("/api/v1/echo")
+  public ResultWrapper<Map<String, String>> echo(HttpServletRequest request) {
+    Map<String, String> headers = new HashMap<>(16);
+    Enumeration<String> headerNames = request.getHeaderNames();
+    while(headerNames.hasMoreElements()) {
+      String name = headerNames.nextElement();
+      headers.put(name, request.getHeader(name));
+    }
+    return new ResultWrapper<>(headers);
   }
 
 }

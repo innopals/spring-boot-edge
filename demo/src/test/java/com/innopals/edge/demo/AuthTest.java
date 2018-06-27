@@ -37,7 +37,7 @@ public class AuthTest {
   //200
   //json
   @Test
-  public void getUserTest() throws Exception {
+  public void basicAuthTest() throws Exception {
 
     mvc.perform(get("/api/v1/users/99")
       .accept(MediaType.APPLICATION_JSON))

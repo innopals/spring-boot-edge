@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * @param <T>
- * @author yrw
+ * @param <T> page list item type
+ * @author bestmike007
  */
 @Data
 @NoArgsConstructor

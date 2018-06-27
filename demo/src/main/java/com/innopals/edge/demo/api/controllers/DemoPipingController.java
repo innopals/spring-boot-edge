@@ -105,4 +105,10 @@ public class DemoPipingController {
     return null;
   }
 
+  @EdgeAction
+  @GetMapping("/api/v1/echo")
+  public ResultWrapper<Map<String, String>> echo(EdgeContext context) {
+    return null;
+  }
+
 }

@@ -39,6 +39,7 @@ public final class AnnotationPlaceholderResolver {
               r -> parsed.add(r.trim())
             )
           );
+          return parsed.toArray(values);
         }
         return method.invoke(source);
       }

@@ -6,6 +6,7 @@ import com.innopals.edge.UserIdentity;
 import javax.validation.constraints.NotNull;
 
 /**
+ * TODO implement default session store using redis template.
  * @author bestmike007
  */
 public class RedisSessionStore implements SessionStore {

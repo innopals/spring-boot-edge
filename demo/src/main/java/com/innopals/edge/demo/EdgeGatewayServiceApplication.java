@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Import;
  * @author bestmike007
  */
 @EnableEdge(
-  baseUrl = "http://127.0.0.1:${server.port}/mock/"
+  baseUrl = "http://127.0.0.1:${server.port}/mock/",
+  trustedProxies = "192.168.0.0/16, 172.16.0.1"
 )
 @Import({
   // component scan increase startup time @ComponentScan(basePackageClasses = {EdgeGatewayServiceApplication.class})

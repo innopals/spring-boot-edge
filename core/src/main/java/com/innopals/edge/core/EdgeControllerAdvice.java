@@ -25,7 +25,7 @@ import org.springframework.util.StringUtils;
 import javax.validation.ConstraintViolationException;
 
 /**
- * @author Created by Mike He on 4/28/2017.
+ * @author bestmike007
  */
 
 @Component
@@ -43,7 +43,6 @@ public class EdgeControllerAdvice {
   private final ObjectMapper objectMapper;
 
   public EdgeControllerAdvice(
-    @Value("${edge.session.max.expire:600}") int maxSessionStoreInSeconds,
     @Autowired Environment env,
     @Autowired(required = false) SessionStore sessionStore,
     @Autowired SessionIdResolver sessionIdResolver,

@@ -154,9 +154,7 @@ public class MapToBackendActionProcessor implements EdgeActionProcessor {
       }
       setAuthSecret(authSecret);
       // set auth header resolver
-      if (authType == BackendAuthType.NONE) {
-        setAuthHeaderResolver(ctx -> null);
-      } else {
+      if (authType == BackendAuthType.JWT_HMAC256) {
         Algorithm algorithm = Algorithm.HMAC256(getAuthSecret());
         setAuthHeaderResolver(context -> {
           Date nowDate = new Date();
@@ -170,6 +168,8 @@ public class MapToBackendActionProcessor implements EdgeActionProcessor {
           }
           return builder.sign(algorithm);
         });
+      } else {
+        setAuthHeaderResolver(ctx -> null);
       }
       // set path property resolver & request body resolver
       Annotation[][] parameterAnnotations = actionMethod.getParameterAnnotations();

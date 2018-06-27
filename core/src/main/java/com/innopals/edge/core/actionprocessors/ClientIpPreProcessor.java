@@ -19,7 +19,7 @@ import java.util.function.Function;
 @Slf4j
 public class ClientIpPreProcessor implements EdgeActionPreProcessor {
 
-  private static final String IPV4_DOT = ".";
+  private static final String IPV4_DOT_REGEX = "\\.";
   private static final String IPV4_PATTERN = "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
   private static final String CIDR_PATTERN = "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\/([012]?\\d|3[012])$";
   private static final String UNKNOWN_IP = "unknown";
@@ -27,8 +27,8 @@ public class ClientIpPreProcessor implements EdgeActionPreProcessor {
   private static int ip2int(String ip) {
     // suppose ip is already a valid ipv4 string
     int rs = 0;
-    for (String n : ip.split(IPV4_DOT)) {
-      rs = rs << 8 + Integer.parseInt(n);
+    for (String n : ip.split(IPV4_DOT_REGEX)) {
+      rs = (rs << 8) + Integer.parseInt(n);
     }
     return rs;
   }
