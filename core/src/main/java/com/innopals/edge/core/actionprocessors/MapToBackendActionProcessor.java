@@ -288,7 +288,9 @@ public class MapToBackendActionProcessor implements EdgeActionProcessor {
     response.setStatus(serviceResponse.code());
     serviceResponse.headers().toMultimap().forEach((key, values) -> {
       if (StringUtils.equalsIgnoreCase(key, HEADER_CONTENT_LENGTH) ||
-        StringUtils.startsWithIgnoreCase(key, "Access-Control-Allow-")) {
+        StringUtils.startsWithIgnoreCase(key, "Access-Control-Allow-") ||
+        context.getHideProxyResponseHeaders().stream().anyMatch(hide -> StringUtils.equalsIgnoreCase(key, hide))
+        ) {
         return;
       }
       values.forEach(value -> response.addHeader(key, value));

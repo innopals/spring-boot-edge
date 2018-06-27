@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,6 +34,8 @@ public final class EdgeContext {
   @Getter
   private final List<Consumer<HttpServletResponse>> proxyResponseHeaderProcessors;
   @Getter
+  private final List<String> hideProxyResponseHeaders;
+  @Getter
   private JavaType backendResultType;
   @Getter
   private Function postProcessor;
@@ -51,6 +54,7 @@ public final class EdgeContext {
     this.sessionIdResolver = sessionIdResolver;
     this.actionConfig = actionConfig;
     this.proxyResponseHeaderProcessors = new LinkedList<>();
+    this.hideProxyResponseHeaders = new LinkedList<>();
   }
 
   public HttpServletRequest getRequest() {
@@ -93,7 +97,7 @@ public final class EdgeContext {
   public <O, U> EdgeContext postProcess(JavaType backendResultType, Function<Supplier<O>, U> handler) {
     this.backendResultType = backendResultType;
     postProcessor = handler;
-    return null;
+    return this;
   }
 
   /***
@@ -105,7 +109,18 @@ public final class EdgeContext {
     return null;
   }
 
-  public void setHeader(String name, String value) {
+  public EdgeContext setHeader(String name, String value) {
     proxyResponseHeaderProcessors.add(response -> response.setHeader(name, value));
+    return this;
+  }
+
+  public EdgeContext addHeader(String name, String value) {
+    proxyResponseHeaderProcessors.add(response -> response.addHeader(name, value));
+    return this;
+  }
+
+  public EdgeContext proxyHideHeaders(String... names) {
+    hideProxyResponseHeaders.addAll(Arrays.asList(names));
+    return this;
   }
 }
