@@ -30,7 +30,7 @@ public class FilterValueTest {
   private MockMvc mvc;
   @Test
   public void testPojo() throws Exception {
-    mvc.perform(get("/api/v1/user/10")
+    mvc.perform(get("/public/api/v1/users/10")
       .accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.code").value("1000000"))
@@ -42,7 +42,7 @@ public class FilterValueTest {
   //page
   @Test
   public void testPageResult() throws Exception {
-    mvc.perform(get("/api/v1/test/page")
+    mvc.perform(get("/public/api/v1/test/page")
       .accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.code").value(1000000))
@@ -54,7 +54,7 @@ public class FilterValueTest {
   //list
   @Test
   public void testListResult() throws Exception {
-    mvc.perform(get("/api/v1/test/list").accept(MediaType.APPLICATION_JSON))
+    mvc.perform(get("/public/api/v1/test/list").accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.code").value(1000000))
       .andExpect(jsonPath("$.message").value("OK"))
@@ -66,7 +66,7 @@ public class FilterValueTest {
 
   @Test
   public void testListMap() throws Exception {
-    mvc.perform(get("/api/v1/test/list/map").accept(MediaType.APPLICATION_JSON))
+    mvc.perform(get("/public/api/v1/test/list/map").accept(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.code").value(1000000))
       .andExpect(jsonPath("$.message").value("OK"))
       .andExpect(jsonPath("$.data.list.length()").value(1))

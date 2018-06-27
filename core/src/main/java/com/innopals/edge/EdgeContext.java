@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
@@ -24,6 +25,7 @@ import java.util.function.Supplier;
  */
 public final class EdgeContext {
 
+  private final static String SEED = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
   private HttpServletRequest request;
   private HttpServletResponse response;
   private UserIdentity userIdentity;
@@ -122,5 +124,29 @@ public final class EdgeContext {
   public EdgeContext proxyHideHeaders(String... names) {
     hideProxyResponseHeaders.addAll(Arrays.asList(names));
     return this;
+  }
+
+  /***
+   * Set current user identity and return the generated session id.
+   * @param userIdentity new user identity
+   * @return generated session id
+   */
+  public String setCurrentUser(@NotNull UserIdentity userIdentity) {
+    String sessionId = sessionIdResolver.resolveSessionId(getRequest());
+    if (StringUtils.isNotEmpty(sessionId)) {
+      sessionStore.removeSession(sessionId);
+    }
+    int len = actionConfig.getApplicationConfig().sessionIdLength();
+    StringBuilder sb = new StringBuilder(len);
+    for (int i = 0; i < len; i++) {
+      sb.append(SEED.charAt((int) (SEED.length() * Math.random())));
+    }
+    sessionId = sb.toString();
+    sessionStore.storeSession(sessionId, userIdentity, actionConfig.getApplicationConfig().sessionExpireInSeconds());
+    String cookieKey = actionConfig.getApplicationConfig().cookieSessionIdKey();
+    if (StringUtils.isNotEmpty(cookieKey)) {
+      getResponse().addCookie(new Cookie(cookieKey, sessionId));
+    }
+    return sessionId;
   }
 }

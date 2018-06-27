@@ -33,7 +33,7 @@ public class ParameterValidationTest {
 
 	@Test
 	public void validatePostTest() throws Exception {
-		mvc.perform(post("/api/v1/user")
+		mvc.perform(post("/public/api/v1/users")
 						.content("{\"name\" : \"a\"}")
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON))
@@ -45,7 +45,7 @@ public class ParameterValidationTest {
 
 	@Test
 	public void validateQueryStringTest() throws Exception {
-		mvc.perform(get("/api/v1/user/199")
+		mvc.perform(get("/public/api/v1/users/199")
 						.accept(MediaType.APPLICATION_JSON))
 						.andDo(print())
 						.andExpect(status().isOk())

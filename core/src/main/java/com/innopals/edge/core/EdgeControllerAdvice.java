@@ -78,7 +78,7 @@ public class EdgeControllerAdvice {
       processor = new DefaultEdgeActionProcessor(objectMapper, builder.build());
     }
     this.processor = processor;
-    this.sessionStore = sessionStore == null ? new InMemorySessionStore(maxSessionStoreInSeconds) : sessionStore;
+    this.sessionStore = sessionStore == null ? new InMemorySessionStore(applicationConfig.sessionExpireInSeconds()) : sessionStore;
     this.defaultPreProcessor = new DefaultEdgeActionPreProcessor(applicationConfig);
   }
 

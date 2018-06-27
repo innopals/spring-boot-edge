@@ -59,6 +59,8 @@ public @interface EnableEdge {
    */
   int sessionIdLength() default 16;
 
+  int sessionExpireInSeconds() default 600;
+
   /**
    * Trusted reverse proxy CIDR/IP list.
    */

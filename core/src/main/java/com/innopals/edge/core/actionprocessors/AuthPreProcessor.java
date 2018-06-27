@@ -39,16 +39,14 @@ public class AuthPreProcessor implements EdgeActionPreProcessor {
       authLevel = AuthLevel.AUTHENTICATED;
     }
     if (authLevel == AuthLevel.UNAUTHENTICATED) {
-      return user -> {};
+      return user -> {
+      };
     }
     Consumer<UserIdentity> processor = user -> {
       if (StringUtils.isEmpty(user.getId())) {
         throw new ActionUnauthenticatedException();
       }
     };
-    if (authLevel != AuthLevel.REQUIRE_AUTHORIZATION) {
-      return processor;
-    }
     // Authorization
     String authExpression = actionConfig.getActionConfig().authExpression();
     if (StringUtils.isEmpty(authExpression)) {
@@ -56,6 +54,12 @@ public class AuthPreProcessor implements EdgeActionPreProcessor {
     }
     if (StringUtils.isEmpty(authExpression)) {
       authExpression = actionConfig.getApplicationConfig().authExpression();
+    }
+    if (authLevel == AuthLevel.AUTHENTICATED && StringUtils.isNotEmpty(authExpression)) {
+      authLevel = AuthLevel.REQUIRE_AUTHORIZATION;
+    }
+    if (authLevel != AuthLevel.REQUIRE_AUTHORIZATION) {
+      return processor;
     }
     if (StringUtils.isEmpty(authExpression)) {
       log.warn("Action auth expression is set to empty, will not allow any request by default.");

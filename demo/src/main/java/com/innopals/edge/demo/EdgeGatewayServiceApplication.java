@@ -2,6 +2,7 @@ package com.innopals.edge.demo;
 
 import com.innopals.edge.annotations.EnableEdge;
 import com.innopals.edge.demo.api.config.SwaggerConfiguration;
+import com.innopals.edge.demo.api.controllers.AuthController;
 import com.innopals.edge.demo.api.controllers.DemoPipingController;
 import com.innopals.edge.demo.api.controllers.MockRearController;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +18,8 @@ import org.springframework.context.annotation.Import;
   // component scan increase startup time @ComponentScan(basePackageClasses = {EdgeGatewayServiceApplication.class})
   SwaggerConfiguration.class,
   DemoPipingController.class,
-  MockRearController.class
+  MockRearController.class,
+  AuthController.class
 })
 public class EdgeGatewayServiceApplication {
   public static void main(String[] args) {

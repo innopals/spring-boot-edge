@@ -31,10 +31,11 @@ import java.util.Map;
   authLevel = AuthLevel.UNAUTHENTICATED
 )
 @RestController
+@RequestMapping("/public")
 public class DemoPipingController {
 
   @EdgeAction
-  @GetMapping("/api/v1/user/{id}")
+  @GetMapping("/api/v1/users/{id}")
   public ResultWrapper<User> getUser(
     @ApiParam(value = "User id")
     @PathVariable("id") @Max(value = 100) Long id) {
@@ -42,7 +43,7 @@ public class DemoPipingController {
   }
 
   @EdgeAction
-  @PostMapping("/api/v1/user")
+  @PostMapping("/api/v1/users")
   public ResultWrapper<User> createUser(
     @ApiParam(value = "User to be created") @RequestBody @Valid UserInfo user,
     BindingResult result) {
@@ -50,7 +51,7 @@ public class DemoPipingController {
   }
 
   @EdgeAction
-  @PutMapping("/api/v1/user/{id}")
+  @PutMapping("/api/v1/users/{id}")
   public ResultWrapper<User> updateUser(
     @ApiParam(value = "User id") @PathVariable("id") Long id,
     @ApiParam(value = "Latest user info") @RequestBody UserInfo user

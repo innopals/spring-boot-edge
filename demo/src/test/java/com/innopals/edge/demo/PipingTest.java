@@ -35,7 +35,7 @@ public class PipingTest {
   //json
   @Test
   public void getUserTest() throws Exception {
-    mvc.perform(get("/api/v1/user/99")
+    mvc.perform(get("/public/api/v1/users/99")
       .accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.code").value("1000000"))
@@ -48,7 +48,7 @@ public class PipingTest {
 
   @Test
   public void createUserTest() throws Exception {
-    mvc.perform(post("/api/v1/user")
+    mvc.perform(post("/public/api/v1/users")
       .contentType(MediaType.APPLICATION_JSON)
       .accept(MediaType.APPLICATION_JSON)
       .content("{\"name\" : \"create a user\"}"))
@@ -63,7 +63,7 @@ public class PipingTest {
 
   @Test
   public void updateUserTest() throws Exception {
-    mvc.perform(put("/api/v1/user/100")
+    mvc.perform(put("/public/api/v1/users/100")
       .contentType(MediaType.APPLICATION_JSON)
       .accept(MediaType.APPLICATION_JSON)
       .content("{\"name\" : \"update a user\"}"))
@@ -78,7 +78,7 @@ public class PipingTest {
   //file
   @Test
   public void fileTest() throws Exception {
-    mvc.perform(get("/api/v1/test/download")
+    mvc.perform(get("/public/api/v1/test/download")
       .accept("*/*"))
       .andExpect(status().isOk())
       .andExpect(header().stringValues("Content-Type", "image/png"))
@@ -89,7 +89,7 @@ public class PipingTest {
   //>=500
   @Test
   public void ServerErrorTest() throws Exception {
-    MvcResult mvcResult = mvc.perform(get("/api/v1/error")
+    MvcResult mvcResult = mvc.perform(get("/public/api/v1/error")
       .accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.code").value("500")).andReturn();
@@ -100,11 +100,11 @@ public class PipingTest {
   @Test
   public void redirectTest() throws Exception {
     MvcResult mvcResult =
-      mvc.perform(get("/api/v1/redirect?url=/api/v1/user/99")
+      mvc.perform(get("/public/api/v1/redirect?url=/public/api/v1/user/99")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().is3xxRedirection())
         .andReturn();
 
-    assertThat(mvcResult.getResponse().getRedirectedUrl()).endsWith("/api/v1/user/99");
+    assertThat(mvcResult.getResponse().getRedirectedUrl()).endsWith("/public/api/v1/user/99");
   }
 }

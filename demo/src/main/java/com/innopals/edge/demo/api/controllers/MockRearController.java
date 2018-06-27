@@ -32,7 +32,7 @@ public class MockRearController {
     return null;
   }
 
-  @GetMapping("/api/v1/user/{id}")
+  @GetMapping("/api/v1/users/{id}")
   public ResultWrapper<User> getUser(
     @ApiParam(value = "User id")
     @PathVariable("id") Long id
@@ -43,7 +43,7 @@ public class MockRearController {
     }});
   }
 
-  @PostMapping("/api/v1/user")
+  @PostMapping("/api/v1/users")
   public ResultWrapper<User> createUser(
     @ApiParam(value = "User to be created") @RequestBody UserInfo user
   ) {
@@ -53,7 +53,7 @@ public class MockRearController {
     }});
   }
 
-  @PutMapping("/api/v1/user/{id}")
+  @PutMapping("/api/v1/users/{id}")
   public ResultWrapper<User> updateUser(
     @ApiParam(value = "User id") @PathVariable("id") Long id,
     @ApiParam(value = "Latest user info") @RequestBody UserInfo user
