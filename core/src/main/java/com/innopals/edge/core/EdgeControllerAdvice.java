@@ -17,7 +17,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -32,6 +33,7 @@ import javax.validation.ConstraintViolationException;
 @Slf4j
 public class EdgeControllerAdvice {
 
+  private final Environment env;
   private final SessionStore sessionStore;
   private final SessionIdResolver sessionIdResolver;
   private final EnableEdge applicationConfig;
@@ -41,6 +43,8 @@ public class EdgeControllerAdvice {
   private final ObjectMapper objectMapper;
 
   public EdgeControllerAdvice(
+    @Value("${edge.session.max.expire:600}") int maxSessionStoreInSeconds,
+    @Autowired Environment env,
     @Autowired(required = false) SessionStore sessionStore,
     @Autowired SessionIdResolver sessionIdResolver,
     @Autowired EnableEdge applicationConfig,
@@ -48,6 +52,7 @@ public class EdgeControllerAdvice {
     @Autowired(required = false) EdgeObjectMapperFactory objectMapperFactory,
     @Autowired(required = false) OkHttpClientConfigurer okHttpClientConfigurer,
     @Autowired(required = false) EdgeActionPreProcessor preProcessor) {
+    this.env = env;
     this.sessionIdResolver = sessionIdResolver;
     this.applicationConfig = applicationConfig;
     this.preProcessor = preProcessor;
@@ -73,7 +78,7 @@ public class EdgeControllerAdvice {
       processor = new DefaultEdgeActionProcessor(objectMapper, builder.build());
     }
     this.processor = processor;
-    this.sessionStore = sessionStore == null ? new InMemorySessionStore() : sessionStore;
+    this.sessionStore = sessionStore == null ? new InMemorySessionStore(maxSessionStoreInSeconds) : sessionStore;
     this.defaultPreProcessor = new DefaultEdgeActionPreProcessor(applicationConfig);
   }
 
@@ -84,7 +89,7 @@ public class EdgeControllerAdvice {
       return joinPoint.proceed();
     }
     // Step 1: Resolve application level config, control level config & action level config
-    EdgeActionConfig config = new EdgeActionConfig(applicationConfig, (MethodSignature) joinPoint.getSignature());
+    EdgeActionConfig config = new EdgeActionConfig(env, applicationConfig, (MethodSignature) joinPoint.getSignature());
     EdgeContext context = new EdgeContext(sessionStore, sessionIdResolver, config);
 
     // Step 2: Set edge context if required in the action method argument list

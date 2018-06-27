@@ -2,9 +2,9 @@ package com.innopals.edge;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.innopals.edge.core.EdgeActionConfig;
-import com.innopals.edge.core.InMemorySessionStore;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -46,8 +46,8 @@ public final class EdgeContext {
   @Setter
   private String realIp;
 
-  public EdgeContext(SessionStore sessionStore, SessionIdResolver sessionIdResolver, EdgeActionConfig actionConfig) {
-    this.sessionStore = sessionStore != null ? sessionStore : new InMemorySessionStore();
+  public EdgeContext(@NotNull SessionStore sessionStore, @NotNull SessionIdResolver sessionIdResolver, @NotNull EdgeActionConfig actionConfig) {
+    this.sessionStore = sessionStore;
     this.sessionIdResolver = sessionIdResolver;
     this.actionConfig = actionConfig;
     this.proxyResponseHeaderProcessors = new LinkedList<>();
@@ -74,7 +74,9 @@ public final class EdgeContext {
       return userIdentity;
     }
     String sessionId = sessionIdResolver.resolveSessionId(getRequest());
-    userIdentity = sessionStore.getUserIdentity(sessionId);
+    if (StringUtils.isNotEmpty(sessionId)) {
+      userIdentity = sessionStore.getUserIdentity(sessionId);
+    }
     if (userIdentity == null) {
       userIdentity = new UserIdentity();
     }

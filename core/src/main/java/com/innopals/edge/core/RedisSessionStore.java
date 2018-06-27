@@ -4,7 +4,6 @@ import com.innopals.edge.SessionStore;
 import com.innopals.edge.UserIdentity;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * @author bestmike007
@@ -16,12 +15,12 @@ public class RedisSessionStore implements SessionStore {
   }
 
   @Override
-  public void touch(@NotNull String sessionId, Date expire) {
+  public void touch(@NotNull String sessionId, int secondsToExpire) {
 
   }
 
   @Override
-  public void storeSession(@NotNull String sessionId, @NotNull UserIdentity userIdentity, Date expire) {
+  public void storeSession(@NotNull String sessionId, @NotNull UserIdentity userIdentity, int secondsToExpire) {
 
   }
 

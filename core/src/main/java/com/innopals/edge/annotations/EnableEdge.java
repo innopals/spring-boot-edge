@@ -1,12 +1,10 @@
 package com.innopals.edge.annotations;
 
-import com.innopals.edge.SessionStore;
 import com.innopals.edge.config.EdgeConfiguration;
 import com.innopals.edge.core.EdgeControllerAdvice;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 

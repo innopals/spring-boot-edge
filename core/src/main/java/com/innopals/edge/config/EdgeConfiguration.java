@@ -3,6 +3,7 @@ package com.innopals.edge.config;
 import com.innopals.edge.EdgeContext;
 import com.innopals.edge.SessionIdResolver;
 import com.innopals.edge.annotations.EnableEdge;
+import com.innopals.edge.core.AnnotationPlaceholderResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -19,7 +21,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +32,13 @@ import java.util.function.Function;
  */
 @SuppressWarnings("SpringFacetCodeInspection")
 @Configuration
+
 public class EdgeConfiguration implements ApplicationContextAware {
 
   private ApplicationContext currentApplicationContext;
 
   @Override
-  public void setApplicationContext(@NotNull ApplicationContext applicationContext) throws BeansException {
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     currentApplicationContext = applicationContext;
   }
 
@@ -68,12 +70,12 @@ public class EdgeConfiguration implements ApplicationContextAware {
   }
 
   @Bean
-  public EnableEdge edgeApplicationConfig() {
+  public EnableEdge edgeApplicationConfig(@Autowired Environment env) {
     Map<String, Object> beans = currentApplicationContext.getBeansWithAnnotation(EnableEdge.class);
     for (String name : beans.keySet()) {
       EnableEdge config = currentApplicationContext.findAnnotationOnBean(name, EnableEdge.class);
       if (config != null) {
-        return config;
+        return AnnotationPlaceholderResolver.resolveAnnotation(EnableEdge.class, config, env);
       }
     }
     throw new RuntimeException("Unable to find the main class with EnableEdge annotation.");

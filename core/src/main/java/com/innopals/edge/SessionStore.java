@@ -17,16 +17,17 @@ public interface SessionStore {
   /***
    * prolong the life-span of a session
    * @param sessionId the session id
+   * @param secondsToExpire
    */
-  void touch(@NotNull String sessionId, Date expire);
+  void touch(@NotNull String sessionId, int secondsToExpire);
 
   /***
    * Save a session in the store.
    * @param sessionId the session id
    * @param userIdentity the user identity
-   * @param expire expire date of the session
+   * @param secondsToExpire expire date of the session
    */
-  void storeSession(@NotNull String sessionId, @NotNull UserIdentity userIdentity, Date expire);
+  void storeSession(@NotNull String sessionId, @NotNull UserIdentity userIdentity, int secondsToExpire);
 
   /***
    * Instantly invalidate the session
