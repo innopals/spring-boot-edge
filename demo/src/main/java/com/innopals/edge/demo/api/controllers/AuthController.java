@@ -18,8 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * @author yrw
- * @since 2018/2/21
+ * @author bestmike007
  */
 
 @Validated
@@ -66,7 +65,7 @@ public class AuthController {
 
   @EdgeAction(
     authLevel = AuthLevel.REQUIRE_AUTHORIZATION,
-    authExpression = "getUser",
+    authExpression = "roles:xxx||getUser",
     backendPath = "/api/v1/users/{id}"
   )
   @GetMapping("/api/v1/users/{id}/testPermission")
@@ -77,7 +76,6 @@ public class AuthController {
   }
 
   @EdgeAction(
-    authLevel = AuthLevel.REQUIRE_AUTHORIZATION,
     authExpression = "role:admins",
     backendPath = "/api/v1/users/{id}"
   )

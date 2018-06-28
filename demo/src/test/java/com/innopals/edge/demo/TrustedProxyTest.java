@@ -15,11 +15,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * @author yrw
- * @since 2018/2/14
+ * @author bestmike007
  */
-
-
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @SpringBootTest(

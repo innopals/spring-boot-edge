@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+/**
+ * @author bestmike007
+ */
 @Data
 public class UserInfo {
   @Size(min = 5, max = 30, message = "the length of the name should between 5-30!")
